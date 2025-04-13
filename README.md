@@ -6,26 +6,6 @@ A simple Streamlit web application that analyzes resumes against job description
 
 This project helps recruiters and job applicants by comparing a candidate's resume to a given job description and providing a match percentage.
 
-## 🚀 Try it out!
-
-- **Run Locally:** [http://localhost:8501](http://localhost:8501)
-- **Deploy on Streamlit Cloud:** [Streamlit Deployment Guide](https://docs.streamlit.io/streamlit-community-cloud/get-started/deploy-an-app)
-
-
-## 📁 Folder Structure
-```
-📁 Resume_analyzer/
-├── app.py                 # Streamlit web app
-├── requirements.txt       # Python libraries list
-├── README.md              # This file
-├── sample_data/           # Sample input files
-│   ├── sample_resume.pdf
-│   └── sample_jobdesc.pdf
-└── screenshots/           # App screenshots
-    ├── interface.png
-    └── score_output.png
-```
-
 ## 🧩 Features
 
 - Upload resume in PDF format
@@ -33,11 +13,10 @@ This project helps recruiters and job applicants by comparing a candidate's resu
 - Get a matching score percentage
 - Simple and interactive web interface using Streamlit
 
-## 📸 Screenshots
+## 🚀 Live App
 
-| App Interface | Score Output |
-|---------------|--------------|
-| ![Interface](screenshots/interface.png) | ![Score Output](screenshots/score_output.png) |
+Check out the live Streamlit application here:  
+👉 [Resume Analyzer App](https://resumeanalyzer-rbpgrwsrcp7d7zsz5ckw9u.streamlit.app/)
 
 ## ⚙️ Installation
 
@@ -53,6 +32,26 @@ This project helps recruiters and job applicants by comparing a candidate's resu
    ```bash
    streamlit run app.py
 
+## 📸 Screenshots
+
+| App Interface | Score Output |
+|---------------|--------------|
+| ![Interface](screenshots/interface.png) | ![Score Output](screenshots/score_output.png) |
 
 
+
+
+## 📁 Folder Structure
+```
+📁 Resume_analyzer/
+├── app.py                 # Streamlit web app
+├── requirements.txt       # Python libraries list
+├── README.md              # This file
+├── sample_data/           # Sample input files
+│   ├── sample_resume.pdf
+│   └── sample_jobdesc.pdf
+└── screenshots/           # App screenshots
+    ├── interface.png
+    └── score_output.png
+```
 
