@@ -1,0 +1,12 @@
+We are looking for a Python Developer to join our engineering team and help us develop and maintain various software products.
+
+Responsibilities:
+- Write reusable, testable, and efficient code
+- Design and implement low-latency, high-availability applications
+- Integrate user-facing elements with server-side logic
+
+Requirements:
+- Strong knowledge of Python and its frameworks (Flask, Django)
+- Familiarity with front-end technologies (HTML5, JavaScript)
+- Understanding of databases (SQL, PostgreSQL)
+- Good communication and teamwork skills
