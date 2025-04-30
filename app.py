@@ -4,7 +4,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import fitz
 import re
 import nltk
-
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 

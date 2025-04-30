@@ -44,14 +44,18 @@ Check out the live Streamlit application here:
 ## 📁 Folder Structure
 ```
 📁 Resume_analyzer/
-├── app.py                 # Streamlit web app
-├── requirements.txt       # Python libraries list
-├── README.md              # This file
-├── sample_data/           # Sample input files
+├── app.py                     # Streamlit web app
+├── requirements.txt
+├── README.md
+├── sample_data/
 │   ├── sample_resume.pdf
 │   └── sample_jobdesc.pdf
-└── screenshots/           # App screenshots
-    ├── interface.png
-    └── score_output.png
+├── screenshots/
+│   ├── interface.png
+│   └── score_output.png
+├── modules/                   ✅ NEW
+│   ├── parser.py              ✅ (PDF text extraction)
+│   ├── matcher.py             ✅ (Keyword extraction + similarity)
+│   └── llm_advisor.py         🔜 (LangChain suggestions)
 ```
 
