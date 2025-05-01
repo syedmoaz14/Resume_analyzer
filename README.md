@@ -50,12 +50,9 @@ Check out the live Streamlit application here:
 ├── sample_data/
 │   ├── sample_resume.pdf
 │   └── sample_jobdesc.pdf
-├── screenshots/
-│   ├── interface.png
-│   └── score_output.png
-├── modules/                   ✅ NEW
-│   ├── parser.py              ✅ (PDF text extraction)
-│   ├── matcher.py             ✅ (Keyword extraction + similarity)
-│   └── llm_advisor.py         🔜 (LangChain suggestions)
+└── screenshots/
+    ├── interface.png
+    └── score_output.png
+
 ```
 
