@@ -1,0 +1,38 @@
+{
+  "tfidf": {
+    "spearman": 0.136,
+    "auc_good_vs_no": 0.578,
+    "mean_by_class": {
+      "0": 0.075,
+      "1": 0.089,
+      "2": 0.083
+    }
+  },
+  "skills": {
+    "spearman": 0.222,
+    "auc_good_vs_no": 0.646,
+    "mean_by_class": {
+      "0": 0.14,
+      "1": 0.189,
+      "2": 0.254
+    }
+  },
+  "embeddings": {
+    "spearman": -0.068,
+    "auc_good_vs_no": 0.437,
+    "mean_by_class": {
+      "0": 0.513,
+      "1": 0.546,
+      "2": 0.475
+    }
+  },
+  "hybrid": {
+    "spearman": 0.059,
+    "auc_good_vs_no": 0.531,
+    "mean_by_class": {
+      "0": 0.409,
+      "1": 0.476,
+      "2": 0.409
+    }
+  }
+}
