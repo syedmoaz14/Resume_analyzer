@@ -69,6 +69,17 @@ def test_term_features_and_bucket():
     assert b.label in b.probabilities and abs(sum(b.probabilities.values()) - 1) < 0.01
 
 
+def test_job_ad_filler_is_hidden_but_skills_stay():
+    from resumelab import terms
+    assert terms._is_filler("strong knowledge") and terms._is_filler("looking")
+    assert not terms._is_filler("kubernetes") and not terms._is_filler("food safety")
+    f = terms.term_features("Python developer.",
+                            "We are looking for a strong team player with Python and Kubernetes experience.")
+    shown = f.matched_top + f.missing_top
+    assert "looking" not in shown and "strong" not in shown
+    assert "kubernetes" in f.missing_top and "python" in f.matched_top
+
+
 def test_dedupe_drops_words_inside_phrases():
     from resumelab.terms import _dedupe
     assert _dedupe(["high availability", "availability", "kubernetes"]) == ["high availability", "kubernetes"]

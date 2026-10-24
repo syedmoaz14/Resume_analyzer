@@ -72,8 +72,9 @@ if uploaded_file and job_input.strip():
         c1.write(", ".join(feats.matched_top[:SHOWN_TERMS]) or "None")
         c2.markdown("**❌ Important job keywords missing**")
         c2.write(", ".join(feats.missing_top[:SHOWN_TERMS]) or "None")
-        st.caption("Keywords are ranked by how distinctive they are across a corpus of resumes "
-                   "and job posts, so rare, specific terms count more than filler.")
+        st.caption("Keywords are ranked by how distinctive they are across a corpus of resumes and "
+                   "job posts; common job-ad filler is hidden. The list is automatic, so it can still "
+                   "include generic phrases: use it as a hint, not a checklist.")
     else:
         st.info("Scoring model files are missing; showing AI feedback only.")
 
@@ -94,12 +95,19 @@ if uploaded_file and job_input.strip():
             st.markdown("**Strengths**")
             for p in feedback.strengths:
                 st.markdown(f"- {p.text}" + (f"  \n  > _{p.evidence}_" if p.evidence else ""))
+            if not feedback.strengths:
+                st.caption("None identified.")
             st.markdown("**Gaps**")
             for g in feedback.gaps:
                 st.markdown(f"- {g.text}")
+            if not feedback.gaps:
+                st.caption("No clear gaps found. (Any gap the AI claimed that is actually covered "
+                           "in your resume was removed by the fact-check.)")
             st.markdown("**Suggestions**")
             for s in feedback.suggestions:
                 st.markdown(f"- {s}")
+            if not feedback.suggestions:
+                st.caption("None.")
             if dropped:
                 st.caption(f"{dropped} unverifiable claim(s) removed by the fact-check.")
         except LLMUnavailable:

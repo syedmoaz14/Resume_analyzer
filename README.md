@@ -16,7 +16,8 @@ match and miss, and optional AI feedback whose claims are fact-checked against y
 
 - **Fit bucket** (Unlikely / Possible / Likely) with class probabilities, not a fake-precise percentage.
 - **Matched and missing job keywords**, ranked by how distinctive they are across a corpus of
-  resumes and job posts (so "servsafe" or "kubernetes" count more than "team" or "work").
+  resumes and job posts (so rarer terms like "kubernetes" or "gaap" count more than "team" or
+  "work"; common job-ad filler is hidden from the displayed lists).
 - **Hidden-text shield:** white, tiny or off-page text in the PDF is excluded and reported
   (a defence against keyword stuffing and prompt injection aimed at AI screeners).
 - **AI feedback** (strengths, gaps, suggestions) from any OpenAI-compatible LLM, with two

@@ -1,7 +1,7 @@
 """Domain-agnostic term weighting learned from a corpus (no hand-written skill list).
 
-IDF is fitted offline on many resumes + job posts (see evals/build_terms.py), so rare,
-specific terms ("servsafe", "gaap", "triage") weigh more than filler ("team", "work").
+IDF is fitted offline on many resumes + job posts (see evals/build_terms.py), so rarer,
+more specific terms ("gaap", "triage") weigh more than common ones ("team", "work").
 """
 import json
 import math
@@ -43,6 +43,21 @@ def _tf(cv, text: str) -> np.ndarray:
     return cv.transform([text.lower()]).toarray()[0].astype(np.float32)
 
 
+# Job-ad boilerplate. Only affects the keywords SHOWN to the user, never the score: corpus
+# statistics (280 job posts) are too thin to separate "team help" from a real skill by frequency.
+FILLER = frozenset("""
+looking join joining team teams help helps various strong good great excellent ability able
+knowledge familiarity familiar experience experienced required requirements preferred plus
+similar including include work working works maintain maintaining develop developing implement
+implementing integrate integrating facing end role responsible responsibilities candidate ideal
+seeking opportunity company position using use well new like etc
+""".split())
+
+
+def _is_filler(term: str) -> bool:
+    return any(w in FILLER for w in term.split())
+
+
 def _dedupe(terms: list[str]) -> list[str]:
     """Drop a single word when a longer phrase in the list already contains it."""
     phrases = [t for t in terms if " " in t]
@@ -64,8 +79,8 @@ def term_features(resume: str, job: str) -> TermFeatures:
     order = order[jw[order] > 0]
     top_total = jw[order].sum()
     top_cov = float(jw[order][present[order]].sum() / top_total) if top_total else 0.0
-    matched = [terms[i] for i in order if present[i]]
-    missing = [terms[i] for i in order if not present[i]]
+    matched = [terms[i] for i in order if present[i] and not _is_filler(terms[i])]
+    missing = [terms[i] for i in order if not present[i] and not _is_filler(terms[i])]
 
     denom = math.sqrt(float(rw @ rw) * float(jw @ jw))
     cosine = float(rw @ jw / denom) if denom else 0.0
