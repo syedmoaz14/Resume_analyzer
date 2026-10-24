@@ -131,6 +131,40 @@ The image contains only the app and the small model files; the LLM settings are 
 time and never baked in. (To reach an Ollama server running on your machine from inside the
 container, use `LLM_BASE_URL=http://host.docker.internal:11434/v1`.)
 
+## MCP server
+
+`mcp_server.py` exposes the analyzer as [MCP](https://modelcontextprotocol.io) tools, so Claude
+Desktop, Claude Code or any MCP client can call it:
+
+| Tool | What it does | Leaves your machine? |
+|---|---|---|
+| `analyze_fit` | fit bucket + matched/missing job keywords for a resume (PDF path or text) and a job description | no |
+| `check_hidden_text` | finds white, tiny or off-page text in a PDF resume | no |
+| `ai_feedback` | fact-checked strengths, gaps and suggestions from an LLM | **yes**, to your configured LLM provider |
+
+```bash
+pip install -r requirements-mcp.txt
+# Claude Code (use the full path to the python that has the requirements installed):
+claude mcp add resumelab -- python /full/path/to/Resume_analyzer/mcp_server.py
+```
+
+For Claude Desktop, add this to `claude_desktop_config.json` and restart it:
+
+```json
+{
+  "mcpServers": {
+    "resumelab": {
+      "command": "python",
+      "args": ["/full/path/to/Resume_analyzer/mcp_server.py"]
+    }
+  }
+}
+```
+
+Then ask, for example: *"Using resumelab, how well does ~/Downloads/cv.pdf fit this job: …"*.
+`ai_feedback` reads `LLM_API_KEY` / `LLM_BASE_URL` / `LLM_MODEL` from `.env`. The server only
+reads `.pdf` files up to 10 MB, and tool errors come back as clear messages.
+
 ## CI
 
 GitHub Actions runs on every push and pull request
@@ -163,6 +197,7 @@ load_dataset("cnamuangtoun/resume-job-description-fit").save_to_disk("evals/data
 
 ```
 app.py                      Streamlit UI
+mcp_server.py               MCP server (3 tools) for Claude Desktop / Claude Code
 src/resumelab/
   parse.py                  PDF parsing + hidden-text shield
   terms.py                  corpus-weighted term features, matched/missing keywords
@@ -189,8 +224,7 @@ requirements.txt            runtime; -dev adds pytest; -evals adds datasets + fa
 
 ## Roadmap
 
-A live deployment, an MCP server so other AI tools can call the analyzer, and a stronger bias
-audit.
+A live deployment and a stronger bias audit.
 
 ## Attribution and licence
 
