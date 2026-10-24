@@ -1,0 +1,10 @@
+AI Engineer
+
+We build LLM-powered products. You will design retrieval-augmented generation (RAG) pipelines, build evaluation harnesses for LLM features, fine-tune open models, and deploy them as low-latency, high-availability APIs.
+
+Requirements:
+- Strong Python and experience shipping production ML or LLM systems
+- Embeddings, vector databases and LangChain or similar frameworks
+- Docker and Kubernetes; cloud experience on AWS or GCP
+- MLOps practices: experiment tracking, CI/CD, monitoring
+- Experience with agents and tool use is a plus

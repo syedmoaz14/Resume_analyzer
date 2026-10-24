@@ -1,6 +1,9 @@
 streamlit
 scikit-learn
-pandas
-nltk
-joblib
 PyMuPDF
+pydantic
+openai
+python-dotenv
+fastembed
+numpy
+pytest

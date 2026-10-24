@@ -1,0 +1,19 @@
+{
+  "_note": "Human relevance labels, 0 = poor fit ... 3 = strong fit. Written by the repo author; extend before trusting any metric.",
+  "pairs": [
+    {"resume": "ml_engineer", "job": "ai_engineer", "label": 3},
+    {"resume": "backend_dev", "job": "ai_engineer", "label": 1},
+    {"resume": "data_analyst", "job": "ai_engineer", "label": 0},
+    {"resume": "student_frontend", "job": "ai_engineer", "label": 0},
+
+    {"resume": "backend_dev", "job": "python_backend", "label": 3},
+    {"resume": "ml_engineer", "job": "python_backend", "label": 2},
+    {"resume": "data_analyst", "job": "python_backend", "label": 1},
+    {"resume": "student_frontend", "job": "python_backend", "label": 0},
+
+    {"resume": "data_analyst", "job": "bi_analyst", "label": 3},
+    {"resume": "ml_engineer", "job": "bi_analyst", "label": 1},
+    {"resume": "backend_dev", "job": "bi_analyst", "label": 1},
+    {"resume": "student_frontend", "job": "bi_analyst", "label": 0}
+  ]
+}

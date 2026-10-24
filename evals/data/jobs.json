@@ -1,0 +1,5 @@
+{
+  "ai_engineer": "AI Engineer. We build LLM-powered products. You will design retrieval-augmented generation pipelines, build evaluation harnesses for LLM features, fine-tune open models, and deploy them as low-latency APIs. Requirements: strong Python, experience with embeddings and vector databases, LangChain or similar, Docker and Kubernetes, cloud experience on AWS or GCP, MLOps practices such as experiment tracking and CI/CD.",
+  "python_backend": "Python Backend Developer. You will design and maintain REST APIs, write reusable and well-tested code, and optimise database performance. Requirements: Python with Django or Flask, PostgreSQL, Redis, unit testing, Docker, Git and CI/CD. Experience on AWS and working in agile teams is a plus.",
+  "bi_analyst": "Business Intelligence Analyst. You will build dashboards and reports that help leadership make decisions. Requirements: advanced SQL, Tableau or Power BI, Python or pandas for analysis, experience running A/B tests, strong statistics and communication with stakeholders."
+}
