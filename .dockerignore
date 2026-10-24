@@ -1,0 +1,24 @@
+# keep secrets, data and dev-only files out of the image
+.git
+.gitignore
+.env
+.env.*
+.idea
+.cache
+.pytest_cache
+__pycache__
+*.pyc
+
+evals
+docs
+tests
+sample_data
+README.md
+Dockerfile
+.dockerignore
+.github
+requirements-dev.txt
+requirements-evals.txt
+
+# generated experiment file, not used by the app
+src/resumelab/data/taxonomy.json

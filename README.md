@@ -1,5 +1,7 @@
 # ResumeLab 📄
 
+[![CI](https://github.com/syedmoaz14/Resume_analyzer/actions/workflows/ci.yml/badge.svg)](https://github.com/syedmoaz14/Resume_analyzer/actions/workflows/ci.yml)
+
 An explainable resume-to-job matcher that works for **any profession**, not just tech.
 Upload a PDF resume, paste a job description, and get a fit bucket, the job keywords you
 match and miss, and optional AI feedback whose claims are fact-checked against your resume.
@@ -118,10 +120,33 @@ For fully local inference use Ollama (`LLM_BASE_URL=http://localhost:11434/v1`,
 `LLM_API_KEY=ollama`, `LLM_MODEL=qwen2.5:3b`). On Streamlit Cloud put the same three values
 in the app's Secrets. Never commit `.env`.
 
+## Docker
+
+```bash
+docker build -t resumelab .
+docker run -p 8501:8501 --env-file .env resumelab   # then open http://localhost:8501
+```
+
+The image contains only the app and the small model files; the LLM settings are passed at run
+time and never baked in. (To reach an Ollama server running on your machine from inside the
+container, use `LLM_BASE_URL=http://host.docker.internal:11434/v1`.)
+
+## CI
+
+GitHub Actions runs on every push and pull request
+([workflow](.github/workflows/ci.yml)):
+
+1. unit tests;
+2. a **scorer regression check**: scores the 1,759-pair held-out benchmark with the committed
+   model files and fails the build if macro-F1 drops below 0.37 (currently 0.399);
+3. a Docker build plus a container health-check smoke test.
+
 ## Tests and evals
 
 ```bash
+pip install -r requirements-dev.txt  # or requirements-evals.txt for the benchmark scripts
 python -m pytest -q                  # unit tests (parser, shield, fact-checks, scoring, audit)
+python evals/check_regression.py     # what CI runs: macro-F1 on the held-out benchmark
 python evals/run_evals.py            # small synthetic comparison (sanity check only)
 python evals/train_scorer.py         # benchmark table above (needs the dataset, see docs)
 python evals/run_bias_audit.py --llm # counterfactual audit
@@ -148,9 +173,11 @@ src/resumelab/
   embed.py, taxonomy.py,    experiment code (not used by the app); see docs/EXPERIMENTS.md
   score.py
   data/                     term weights and bucket model (numbers only, no resume text)
-evals/                      training, benchmarks, audit, experiments
+evals/                      training, benchmarks, audit, experiments, CI regression check
 docs/EXPERIMENTS.md         full experiment log, including failures
 tests/
+Dockerfile, .github/        container image and CI workflow
+requirements.txt            runtime; -dev adds pytest; -evals adds datasets + fastembed
 ```
 
 ## Limitations
@@ -162,8 +189,8 @@ tests/
 
 ## Roadmap
 
-Docker image and CI (tests + evals on every push), a live deployment, an MCP server so other
-AI tools can call the analyzer, and a stronger bias audit.
+A live deployment, an MCP server so other AI tools can call the analyzer, and a stronger bias
+audit.
 
 ## Attribution and licence
 
