@@ -6,6 +6,9 @@ An explainable resume-to-job matcher that works for **any profession**, not just
 Upload a PDF resume, paste a job description, and get a fit bucket, the job keywords you
 match and miss, and optional AI feedback whose claims are fact-checked against your resume.
 
+**🚀 Live demo: https://resume-analyzer-portfolio.streamlit.app**
+(free hosting: it may take a few seconds to wake up, and AI feedback has a daily limit)
+
 > **Status: portfolio project.** The scoring model is deliberately honest about its limits:
 > it beats guessing on a real benchmark, but it is not a hiring decision tool.
 
@@ -224,7 +227,7 @@ requirements.txt            runtime; -dev adds pytest; -evals adds datasets + fa
 
 ## Roadmap
 
-A live deployment and a stronger bias audit.
+A stronger bias audit.
 
 ## Attribution and licence
 
