@@ -4,6 +4,4 @@ PyMuPDF
 pydantic
 openai
 python-dotenv
-fastembed
 numpy
-pytest

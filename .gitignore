@@ -180,3 +180,7 @@ sample_data/Resume.csv
 evals/data/onet/
 evals/data/esco/
 src/resumelab/data/taxonomy.json
+
+# IDE and generated eval outputs
+.idea/
+evals/*_results.json
