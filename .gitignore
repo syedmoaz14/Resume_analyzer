@@ -184,3 +184,6 @@ src/resumelab/data/taxonomy.json
 # IDE and generated eval outputs
 .idea/
 evals/*_results.json
+
+# Streamlit secrets (keep the .example)
+.streamlit/secrets.toml
