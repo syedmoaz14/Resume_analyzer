@@ -5,12 +5,13 @@ from pathlib import Path
 import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).parent / "src"))
+from resumelab import bucket, terms  # noqa: E402
 from resumelab.explain import explain  # noqa: E402
 from resumelab.llm import LLMUnavailable  # noqa: E402
 from resumelab.parse import parse_pdf  # noqa: E402
-from resumelab.score import score  # noqa: E402
 
 MAX_LLM_CALLS_PER_SESSION = 5
+SHOWN_TERMS = 15
 
 # Hosted deploys: put LLM_BASE_URL / LLM_API_KEY / LLM_MODEL in Streamlit secrets.
 try:
@@ -22,7 +23,7 @@ except Exception:  # no secrets file locally
 
 st.set_page_config(page_title="ResumeLab", page_icon="📄")
 st.title("📄 ResumeLab")
-st.markdown("Explainable resume-to-job matching, with a hidden-text safety check.")
+st.markdown("Explainable resume-to-job matching for any profession, with a hidden-text safety check.")
 
 uploaded_file = st.file_uploader("📤 Upload Resume (PDF)", type=["pdf"])
 job_input = st.text_area("💼 Paste Job Description Here", height=200)
@@ -35,24 +36,28 @@ if uploaded_file and job_input.strip():
         st.stop()
 
     if parsed.has_hidden_content:
-        st.warning("⚠️ Hidden text detected and excluded from scoring.")
+        st.warning("⚠️ Hidden text detected and excluded from the analysis.")
         with st.expander("Show findings"):
             st.write(parsed.findings)
 
-    report = score(parsed.visible_text, job_input)
-    st.success(f"✅ Match Score: {report.overall * 100:.1f}%")
-
-    c1, c2, c3 = st.columns(3)
-    c1.metric("Skill coverage", f"{report.skill_coverage * 100:.0f}%")
-    c2.metric("Semantic match", "n/a" if report.semantic is None else f"{report.semantic * 100:.0f}%")
-    c3.metric("Keyword overlap", f"{report.text_similarity * 100:.0f}%")
-
-    st.subheader("✅ Matched skills")
-    st.write(", ".join(report.matched) or "None")
-    st.subheader("❌ Missing skills")
-    st.write(", ".join(report.missing) or "None")
-    if report.extra:
-        st.caption("Other skills on the resume: " + ", ".join(report.extra))
+    if terms.available() and bucket.available():
+        feats = terms.term_features(parsed.visible_text, job_input)
+        result = bucket.predict(feats)
+        icon = {"Likely fit": "🟢", "Possible fit": "🟡", "Unlikely fit": "🔴"}[result.label]
+        st.subheader(f"{icon} {result.label}")
+        st.caption(
+            "A rough estimate, not a verdict. On a labelled benchmark this model beats guessing "
+            "but is far from perfect (macro-F1 ≈ 0.40). Probabilities: "
+            + ", ".join(f"{k} {v:.0%}" for k, v in result.probabilities.items()))
+        c1, c2 = st.columns(2)
+        c1.markdown("**✅ Job keywords found in your resume**")
+        c1.write(", ".join(feats.matched_top[:SHOWN_TERMS]) or "None")
+        c2.markdown("**❌ Important job keywords missing**")
+        c2.write(", ".join(feats.missing_top[:SHOWN_TERMS]) or "None")
+        st.caption("Keywords are ranked by how distinctive they are across a corpus of resumes "
+                   "and job posts, so rare, specific terms count more than filler.")
+    else:
+        st.info("Scoring model files are missing; showing AI feedback only.")
 
     st.divider()
     st.subheader("🤖 AI feedback")
@@ -76,6 +81,6 @@ if uploaded_file and job_input.strip():
             if dropped:
                 st.caption(f"{dropped} unverifiable claim(s) removed by the fact-check.")
         except LLMUnavailable:
-            st.info("AI feedback is unavailable right now; the score above is still valid.")
+            st.info("AI feedback is unavailable right now; the analysis above is still valid.")
 else:
     st.info("Upload a resume and paste a job description to begin.")

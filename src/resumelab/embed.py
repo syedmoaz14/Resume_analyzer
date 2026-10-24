@@ -4,12 +4,13 @@ For each requirement line in the job description, find the best-matching resume
 chunk; the score is the mean of those best similarities. This answers "is each
 thing the job asks for covered somewhere?" rather than "do the documents look alike?".
 """
+import os
 import re
 from functools import lru_cache
 
 import numpy as np
 
-MODEL = "BAAI/bge-small-en-v1.5"
+MODEL = os.environ.get("RESUMELAB_EMBED_MODEL", "BAAI/bge-small-en-v1.5")
 MIN_CHARS = 20
 MAX_CHUNKS = 120
 
@@ -26,9 +27,19 @@ def _model():
     return TextEmbedding(MODEL)
 
 
+_cache: dict[str, np.ndarray] = {}  # chunk text -> unit vector; job posts repeat a lot
+
+
 def _embed(texts: list[str]) -> np.ndarray:
-    vecs = np.array(list(_model().embed(texts)), dtype=np.float32)
-    return vecs / np.linalg.norm(vecs, axis=1, keepdims=True)
+    todo = [t for t in dict.fromkeys(texts) if t not in _cache]
+    if todo:
+        vecs = np.array(list(_model().embed(todo)), dtype=np.float32)
+        vecs /= np.linalg.norm(vecs, axis=1, keepdims=True)
+        _cache.update(zip(todo, vecs))
+        if len(_cache) > 50_000:  # bound memory in long-running servers
+            for k in list(_cache)[:10_000]:
+                del _cache[k]
+    return np.stack([_cache[t] for t in texts])
 
 
 def semantic_coverage(resume: str, job: str) -> float | None:

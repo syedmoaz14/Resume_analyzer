@@ -50,6 +50,30 @@ def test_false_gaps_are_dropped():
     assert removed == 1 and [g.requirement for g in fb.gaps] == ["Kubernetes"]
 
 
+def test_audit_variants_and_spread():
+    from resumelab.audit import audit, variants
+    v = variants("Python developer with SQL.")
+    assert "career gap line" in v and any(k.startswith("arabic-coded") for k in v)
+    res = audit("Python developer with SQL.", "Need Python", lambda r, j: 10.0 + r.startswith("Jamal"))
+    assert res.spread == 1.0 and res.worst_delta()[0].endswith("Jamal Jackson")
+
+
+def test_term_features_and_bucket():
+    from resumelab import bucket, terms
+    j = "Seeking a pastry chef with knowledge of food safety and bakery operations."
+    good = terms.term_features("Pastry chef. Food safety certified, ran bakery operations.", j)
+    bad = terms.term_features("Software engineer writing Python and Docker services.", j)
+    assert good.weighted_cov > bad.weighted_cov
+    assert "food safety" in good.matched_top or "pastry" in good.matched_top
+    b = bucket.predict(good)
+    assert b.label in b.probabilities and abs(sum(b.probabilities.values()) - 1) < 0.01
+
+
+def test_dedupe_drops_words_inside_phrases():
+    from resumelab.terms import _dedupe
+    assert _dedupe(["high availability", "availability", "kubernetes"]) == ["high availability", "kubernetes"]
+
+
 def test_score_breakdown():
     r = score("Python, SQL, Docker", "Need Python, SQL, Kubernetes")
     assert r.matched == ["python", "sql"] and r.missing == ["kubernetes"]

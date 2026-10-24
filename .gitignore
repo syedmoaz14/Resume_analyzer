@@ -172,3 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# downloaded eval datasets
+evals/data/hf_fit/
+evals/data/kaggle/
+sample_data/Resume.csv
+evals/data/onet/
+evals/data/esco/
+src/resumelab/data/taxonomy.json
